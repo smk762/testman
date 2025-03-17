@@ -1,0 +1,27 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+body {
+  background-color: #111827;
+  color: #f3f4f6;
+}
+
+.log-entry {
+  margin-bottom: 4px;
+}
+.log-entry.error {
+  color: #f87171;
+}
+.log-entry.warn {
+  color: #fbbf24;
+}
+.log-entry.info {
+  color: #ffffff;
+}
+.log-entry.debug {
+  color: #34d399;
+}
+.log-entry.default {
+  color: #9ca3af;
+}

@@ -1,0 +1,16 @@
+{
+    "gui": "testman_tcp",
+    "enable_hd": false,
+    "netid": 8888,
+    "rpcport": 8876,
+    "use_trading_proto_v2": true,
+    "rpc_password": "RPC_CONTRoL_USERP@SSW0RD",
+    "passphrase": "",
+    "event_stream_configuration": {
+      "access_control_allow_origin": "*",
+      "active_events": {
+        "NETWORK": { "stream_interval_seconds": 1.5 },
+        "COIN_BALANCE": {} 
+      }
+   }
+}

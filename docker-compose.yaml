@@ -1,0 +1,139 @@
+services:
+  kdf-wasm:
+    container_name: kdf-wasm
+    build:
+      context: ./wasm_rpc
+      dockerfile: Dockerfile
+      args:
+        - USER_ID=${USER_ID:-1000}
+        - GROUP_ID=${GROUP_ID:-1000}
+    ports:
+      - ${VITE_RPC_PORT:-8896}:${VITE_RPC_PORT:-8896}
+      - ${VITE_WEB_PORT:-3008}:${VITE_WEB_PORT:-3008}
+      - ${VITE_WS_PORT:-9996}:${VITE_WS_PORT:-9996}
+    volumes:
+      - ./config/coins:/home/komodian/kdf/coins
+    environment:
+      - VITE_RPC_PORT=${VITE_RPC_PORT:-8896}
+      - VITE_WEB_PORT=${VITE_WEB_PORT:-3008}
+      - VITE_WS_PORT=${VITE_WS_PORT:-9996}
+    command: sh ./init_wasm.sh
+    healthcheck:
+      test: exit 0
+      interval: 10s
+      retries: 5
+      start_period: 30s
+      timeout: 10s
+
+  kdf-wasm-hd:
+    container_name: kdf-wasm-hd
+    build:
+      context: ./wasm_rpc
+      dockerfile: Dockerfile
+      args:
+        - USER_ID=${USER_ID:-1000}
+        - GROUP_ID=${GROUP_ID:-1000}
+    ports:
+      - ${VITE_RPC_PORT:-18896}:${VITE_RPC_PORT:-18896}
+      - ${VITE_WEB_PORT:-13008}:${VITE_WEB_PORT:-13008}
+      - ${VITE_WS_PORT:-19996}:${VITE_WS_PORT:-19996}
+    volumes:
+      - ./config/coins:/home/komodian/kdf/coins
+    environment:
+      - VITE_RPC_PORT=${VITE_RPC_PORT:-18896}
+      - VITE_WEB_PORT=${VITE_WEB_PORT:-13008}
+      - VITE_WS_PORT=${VITE_WS_PORT:-19996}
+    command: sh ./init_wasm_hd.sh
+    healthcheck:
+      test: exit 0
+      interval: 10s
+      retries: 5
+      start_period: 30s
+      timeout: 10s
+    depends_on:
+      kdf-wasm:
+        condition: service_healthy
+
+  kdf-tcp:
+    container_name: kdf-tcp
+    build:
+      context: ./tcp
+      dockerfile: Dockerfile
+      args:
+        - USER_ID=${USER_ID:-1000}
+        - GROUP_ID=${GROUP_ID:-1000}
+    ports:
+      - "8874:8874"
+      - "53341:43341"
+      - "53331:43331"
+    volumes:
+      - ./config/coins:/home/komodian/kdf/coins
+    command: ./init_tcp.sh
+    healthcheck:
+      test: exit 0
+      interval: 10s
+      retries: 5
+      start_period: 30s
+      timeout: 10s
+      
+  kdf-tcp-hd:
+    container_name: kdf-tcp-hd
+    build:
+      context: ./tcp
+      dockerfile: Dockerfile
+      args:
+        - USER_ID=${USER_ID:-1000}
+        - GROUP_ID=${GROUP_ID:-1000}
+    ports:
+      - "18874:18874"
+      - "63341:43341"
+      - "63331:43331"
+    volumes:
+      - ./config/coins:/home/komodian/kdf/coins
+    command: ./init_tcp_hd.sh
+    healthcheck:
+      test: exit 0
+      interval: 10s
+      retries: 5
+      start_period: 30s
+      timeout: 10s
+    depends_on:
+      kdf-tcp:
+        condition: service_healthy
+
+  newman:
+    container_name: newman
+    build:
+      context: ./newman
+      dockerfile: Dockerfile
+      args:
+        - USER_ID=${USER_ID:-1000}
+        - GROUP_ID=${GROUP_ID:-1000}
+    entrypoint: ["/bin/sh", "-c"]
+    volumes:
+      - ./newman:/etc/newman
+      - ./config/coins:/etc/newman/coins
+      - /etc/newman/node_modules  # Anonymous volume for node_modules
+    environment:
+      - NEWMAN_REPORTER=html
+      - DEBUG=true
+    command: "./run_test.sh"
+    depends_on:
+      kdf-tcp:
+        condition: service_healthy
+      kdf-tcp-hd:
+        condition: service_healthy
+      kdf-wasm:
+        condition: service_healthy
+      kdf-wasm-hd:
+        condition: service_healthy
+
+  nginx:
+    image: nginx:latest
+    ports:
+      - "80:80"
+    volumes:
+      - ./config/nginx.conf:/etc/nginx/conf.d/default.conf
+      - ./newman/reports:/usr/share/nginx/html
+    depends_on:
+      - newman
