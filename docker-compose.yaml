@@ -137,3 +137,20 @@ services:
       - ./newman/reports:/usr/share/nginx/html
     depends_on:
       - newman
+
+  reown-wc:
+    container_name: reown-wc
+    build:
+      context: ./reown-wc
+      dockerfile: Dockerfile
+      args:
+        - USER_ID=${USER_ID:-1000}
+        - GROUP_ID=${GROUP_ID:-1000}
+    ports:
+      - "3033:3033"
+    command: yarn dev
+    depends_on:
+      kdf-wasm:
+        condition: service_healthy
+      kdf-wasm-hd:
+        condition: service_healthy
