@@ -108,6 +108,7 @@ export default function useWalletConnectEventsManager(initialized: boolean) {
 
         case COSMOS_SIGNING_METHODS.COSMOS_SIGN_DIRECT:
         case COSMOS_SIGNING_METHODS.COSMOS_SIGN_AMINO:
+        case COSMOS_SIGNING_METHODS.COSMOS_GET_ACCOUNTS:
           return ModalStore.open('SessionSignCosmosModal', { requestEvent, requestSession })
 
         case SOLANA_SIGNING_METHODS.SOLANA_SIGN_MESSAGE:

@@ -55,6 +55,10 @@ export default class CosmosLib {
     return account[0].address
   }
 
+   public async getAccounts() {
+    return await this.directSigner.getAccounts()
+  }
+
   public async signDirect(address: string, signDoc: SignDoc) {
     return await this.directSigner.signDirect(address, signDoc)
   }
