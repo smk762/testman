@@ -22,17 +22,14 @@ export default function WalletConnectPage(params: { deepLink?: string }) {
         walletkit.core.pairing.events.removeListener('pairing_expire', pairingExpiredListener)
       }
     }
-    console.log("NOT PAIRER");
     walletkit.once('session_proposal', () => {
       walletkit.core.pairing.events.removeListener('pairing_expire', pairingExpiredListener)
     })
-    console.log("PAIRER");
     try {
       setLoading(true)
       walletkit.core.pairing.events.on('pairing_expire', pairingExpiredListener)
       await walletkit.pair({ uri })
     } catch (error) {
-      console.log("ERRRO:", error);
       styledToast((error as Error).message, 'error')
       ModalStore.close()
     } finally {

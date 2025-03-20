@@ -32,8 +32,6 @@ export async function approveCosmosRequest(
       const accounts = await wallet.getAccounts()
       return formatJsonRpcResult(id, accounts)
 
-
-
     default:
       throw new Error(getSdkError('INVALID_METHOD').message)
   }
