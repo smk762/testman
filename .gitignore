@@ -11,6 +11,8 @@ mm2.log
 # https://github.com/vitejs/vite/issues/13267#issuecomment-1574703992
 *.timestamp-*.mjs
 coins
+wasm_rpc/js/kdflib.d.ts
+wasm_rpc/js/kdflib.js
 
 # Logs
 logs
@@ -142,3 +144,5 @@ dist
 .yarn/build-state.yml
 .yarn/install-state.gz
 .pnp.*
+wasm_rpc/js/kdflib.d.ts
+wasm_rpc/js/kdflib.d.ts
