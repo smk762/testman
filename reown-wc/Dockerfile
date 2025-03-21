@@ -23,3 +23,4 @@ COPY ./ /home/komodian/kdf
 RUN PATH=/usr/local/bin/:$PATH
 RUN chown -R komodian:komodian /home/komodian/kdf
 USER komodian
+RUN yarn install --frozen-lockfile
