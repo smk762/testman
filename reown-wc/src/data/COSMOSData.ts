@@ -21,6 +21,7 @@ export const COSMOS_MAINNET_CHAINS = {
  * Methods
  */
 export const COSMOS_SIGNING_METHODS = {
+  COSMOS_GET_ACCOUNTS: 'cosmos_getAccounts',
   COSMOS_SIGN_DIRECT: 'cosmos_signDirect',
-  COSMOS_SIGN_AMINO: 'cosmos_signAmino'
+  COSMOS_SIGN_AMINO: 'cosmos_signAmino',
 }

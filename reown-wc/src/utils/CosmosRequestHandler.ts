@@ -28,6 +28,10 @@ export async function approveCosmosRequest(
       )
       return formatJsonRpcResult(id, signedAmino.signature)
 
+    case COSMOS_SIGNING_METHODS.COSMOS_GET_ACCOUNTS:
+      const accounts = await wallet.getAccounts()
+      return formatJsonRpcResult(id, accounts)
+
     default:
       throw new Error(getSdkError('INVALID_METHOD').message)
   }
