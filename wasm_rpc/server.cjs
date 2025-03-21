@@ -145,6 +145,7 @@ const server = http.createServer((req, res) => {
           res.writeHead(200, { 'Content-Type': 'application/json' });
           res.end(JSON.stringify({ status: 'success', action: 'reload_kdf_page' }));
         } else if (body.action === 'restart_kdf') {
+          console.log("Restarting KDF...")
           if (connectedClient && connectedClient.readyState === WebSocket.OPEN) {
             const uuid = uuidv4();
             const message = JSON.stringify({
@@ -153,10 +154,13 @@ const server = http.createServer((req, res) => {
               coins_json_url: body.coins_json_url,
               uuid: uuid,
             });
-
+            console.log(`msg: ${message}`)
             connectedClient.send(message);
+
+            console.log("msg sent")
             connectedClient.on('message', (message) => {
               const receivedMessage = message.toString();
+              console.log(`receivedMessage: ${receivedMessage}`)
               const receivedMessageObj = JSON.parse(receivedMessage);
               if (receivedMessageObj.message?.action && receivedMessageObj.uuid === uuid) {
                 res.writeHead(200, { 'Content-Type': 'application/json' });
@@ -169,6 +173,7 @@ const server = http.createServer((req, res) => {
               }
             });
           } else {
+            console.log('Webpage running KDF is not connected to websocket')
             res.writeHead(503, { 'Content-Type': 'application/json' });
             res.end(
               JSON.stringify({
@@ -343,8 +348,8 @@ async function checkIfWebServerIsRunning(cb) {
 function processZipFile(zipfile_name, kdf_zips_dir, res) {
   // Extract version from filename
   const basename = path.basename(zipfile_name, '.zip');
-  const temp = basename.split('_').slice(1).join('_');
-  const version = temp.split('-')[0];
+  const fullversion = basename.split('_').slice(1).join('_');
+  const version = fullversion.split('-')[0];
   // Unzip and process files
   console.log('Extracting and processing files...');
   exec(
@@ -353,6 +358,11 @@ function processZipFile(zipfile_name, kdf_zips_dir, res) {
                 mkdir -p temp &&
                 unzip -o "${zipfile_name}" -d temp &&
                 cd temp &&
+                pwd &&
+                ls -al &&
+                ls -al ../../
+                mkdir -p ../../public &&
+                mkdir -p ../../js/snippets &&
                 mv kdflib.js ../../js/kdflib.js &&
                 mv kdflib.d.ts ../../js/kdflib.d.ts &&
                 rm -rf ../../js/snippets/*
@@ -364,6 +374,8 @@ function processZipFile(zipfile_name, kdf_zips_dir, res) {
     (error, stdout, stderr) => {
       if (error) {
         console.error(`Extraction error: ${error}`);
+        console.error(`Extraction stdout: ${stdout}`);
+        console.error(`Extraction stderr: ${stderr}`);
         res.writeHead(500, { 'Content-Type': 'application/json' });
         res.end(
           JSON.stringify({
