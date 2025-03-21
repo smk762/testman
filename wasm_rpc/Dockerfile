@@ -18,8 +18,10 @@ RUN yarn global add pm2
 
 WORKDIR /home/komodian/kdf
 COPY ./ /home/komodian/kdf
-
+RUN touch kdf_wasm_hd.log
+RUN touch kdf_wasm.log
 
 RUN PATH=/usr/local/bin/:$PATH
 RUN chown -R komodian:komodian /home/komodian/kdf
 USER komodian
+
