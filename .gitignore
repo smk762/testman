@@ -1,5 +1,8 @@
 newman/node_modules/
 newman/reports/
+zombie-test-runner/node_0/
+*.7776
+
 *.wasm
 kdf_zips
 coins_versions
@@ -11,8 +14,6 @@ mm2.log
 # https://github.com/vitejs/vite/issues/13267#issuecomment-1574703992
 *.timestamp-*.mjs
 coins
-wasm_rpc/js/kdflib.d.ts
-wasm_rpc/js/kdflib.js
 
 # Logs
 logs
