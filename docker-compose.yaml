@@ -1,6 +1,7 @@
 services:
   kdf-wasm:
     container_name: kdf-wasm
+    restart: always
     build:
       context: ./wasm_rpc
       dockerfile: Dockerfile
@@ -29,6 +30,7 @@ services:
 
   kdf-wasm-hd:
     container_name: kdf-wasm-hd
+    restart: always
     build:
       context: ./wasm_rpc
       dockerfile: Dockerfile
@@ -60,6 +62,7 @@ services:
 
   kdf-tcp:
     container_name: kdf-tcp
+    restart: always
     build:
       context: ./tcp
       dockerfile: Dockerfile
@@ -82,6 +85,7 @@ services:
       
   kdf-tcp-hd:
     container_name: kdf-tcp-hd
+    restart: always
     build:
       context: ./tcp
       dockerfile: Dockerfile
@@ -135,6 +139,7 @@ services:
 
   reown-wc:
     container_name: reown-wc
+    restart: always
     build:
       context: ./reown-wc
       dockerfile: Dockerfile
@@ -149,3 +154,18 @@ services:
         condition: service_healthy
       kdf-wasm-hd:
         condition: service_healthy
+
+  zombie-test-runner:
+    container_name: zombie-test-runner
+    restart: always
+    build:
+      context: ./zombie-test-runner
+      dockerfile: Dockerfile
+    environment:
+      - COIN_RPC_PORT=${COIN_RPC_PORT:-7000}
+    ports:
+      - "${COIN_RPC_PORT:-7000}:${COIN_RPC_PORT:-7000}"
+    volumes:
+      - ./zombie-test-runner:/data
+    command: python3 -u /data/start_blockchain.py
+ 
