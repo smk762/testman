@@ -5,6 +5,8 @@ const logger = require('./logger');
 const writer = require('./writer');
 const collection = require('./collection.json');
 const coins = require('./coins');
+const coinsConfig = JSON.parse(fs.readFileSync('./coins_config.json'));
+
 require('./types');
 
 console.log("=== Newman Tests Starting ===");
@@ -71,7 +73,8 @@ async function runTests(collection, folder, testName) {
     try {
         const name = testName.toLowerCase();
         const timestamp = generateTimestamp();
-        const envFile = path.join(__dirname, `env_${name}.json`);
+        var envFile = path.join(__dirname, `env_${name}.json`);
+
         if (!fs.existsSync(envFile)) {
             logger.error(`Environment file not found: ${envFile}`);
             throw new Error(`Environment file not found: ${envFile}`);
