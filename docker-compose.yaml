@@ -14,6 +14,8 @@ services:
       - ${VITE_WS_PORT:-9996}:${VITE_WS_PORT:-9996}
     volumes:
       - ./config/coins:/home/komodian/kdf/coins
+      - ./config/KDF_wasm.json:/home/komodian/kdf/MM2.json
+      - ./wasm_rpc/js:/home/komodian/kdf/js
       - /etc/letsencrypt/live/whiskey-charlie.battlefield.earth/privkey.pem:/certs/privkey.pem
       - /etc/letsencrypt/live/whiskey-charlie.battlefield.earth/fullchain.pem:/certs/fullchain.pem
     environment:
@@ -43,6 +45,8 @@ services:
       - ${VITE_WS_PORT:-19996}:${VITE_WS_PORT:-19996}
     volumes:
       - ./config/coins:/home/komodian/kdf/coins
+      - ./config/KDF_wasm_hd.json:/home/komodian/kdf/MM2.json
+
       - /etc/letsencrypt/live/whiskey-charlie.battlefield.earth/privkey.pem:/certs/privkey.pem
       - /etc/letsencrypt/live/whiskey-charlie.battlefield.earth/fullchain.pem:/certs/fullchain.pem
     environment:
@@ -74,6 +78,7 @@ services:
       - "53341:43341"
       - "53331:43331"
     volumes:
+      - ./config/KDF_tcp.json:/home/komodian/kdf/MM2.json
       - ./config/coins:/home/komodian/kdf/coins
     command: ./init_tcp.sh
     healthcheck:
@@ -98,6 +103,7 @@ services:
       - "63331:43331"
     volumes:
       - ./config/coins:/home/komodian/kdf/coins
+      - ./config/KDF_tcp_hd.json:/home/komodian/kdf/MM2.json
     command: ./init_tcp_hd.sh
     healthcheck:
       test: exit 0

@@ -1,7 +1,6 @@
 #!/bin/bash
 
 cd /home/komodian/kdf/
-cp KDF_wasm_hd.json MM2.json
 RPC_PORT=$(cat MM2.json | jq -r '.rpcport')
 USERPASS=$(cat MM2.json | jq -r '.rpc_password')
 MM_LOG="/home/komodian/kdf/kdf-wasm-hd.log"
