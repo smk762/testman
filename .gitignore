@@ -2,7 +2,9 @@ newman/node_modules/
 newman/reports/
 zombie-test-runner/node_0/
 *.7776
-
+kdflib.js
+kdflib.d.ts
+script.js
 *.wasm
 kdf_zips
 coins_versions
@@ -145,3 +147,6 @@ dist
 .yarn/build-state.yml
 .yarn/install-state.gz
 .pnp.*
+kdflib.js
+kdflib.d.ts
+script.js
