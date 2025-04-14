@@ -11,9 +11,7 @@ RUN set -euxo pipefail \
     && apt-get -y --no-install-recommends install \
        ca-certificates curl libgomp1 python3 python3-pip \
        libcurl4-openssl-dev build-essential python3-dev \
-       gcc g++ make pkg-config libssl-dev \
-    && apt-get -y clean \
-    && rm -rf /var/{lib/apt/lists/*,cache/apt/archives/*.deb,tmp/*,log/*} /tmp/*
+       gcc g++ make pkg-config libssl-dev
 
 VOLUME ["/data"]
 
