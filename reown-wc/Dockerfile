@@ -16,11 +16,8 @@ RUN apt-get update && apt-get install -y jq gnupg bash wget rsync unzip && \
 
 RUN yarn global add pm2
 
-WORKDIR /home/komodian/kdf
-COPY ./ /home/komodian/kdf
-
-
-RUN PATH=/usr/local/bin/:$PATH
-RUN chown -R komodian:komodian /home/komodian/kdf
 USER komodian
+WORKDIR /home/komodian/kdf
+COPY --chown=komodian:komodian ./ /home/komodian/kdf
+RUN PATH=/usr/local/bin/:$PATH
 RUN yarn install --frozen-lockfile
